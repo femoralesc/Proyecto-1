@@ -11,6 +11,6 @@ public class PerfumeRepository {
 
     private List<Perfume> perfumes = new ArrayList<>();
 
-    public List
+    public List<Perfume> getPerfumes() {}
 
 }
