@@ -1,18 +1,31 @@
 package com.perfumes.Perfumes.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name = "perfume")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Perfume {
 
-    private int id;
-    private String nombre;
-    private String marca;
-    private String tipo;
-    private String genero;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idPerfume;
+
+    @Column(unique = true, nullable = false)
+    private String nombrePerfume;
+
+    @Column(nullable = false)
+    private String marcaPerfume;
+
+    @Column(nullable = false)
+    private String tipoPerfume;
+
+    @Column(nullable = false)
+    private String generoPerfume;
 
 }
