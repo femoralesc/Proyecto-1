@@ -5,9 +5,8 @@ import com.perfumes.Perfumes.service.PerfumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -28,4 +27,55 @@ public class PerfumeController {
         }
         return new ResponseEntity<>(perfumes, HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<Perfume> create(@RequestBody Perfume perfume) {
+        Perfume perfumeCreated = perfumeService.save(perfume);
+        return new ResponseEntity<>(perfumeCreated, HttpStatus.CREATED);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Perfume> findById(@PathVariable Long id) {
+        try {
+            Perfume perfume = perfumeService.findById(id);
+            return new ResponseEntity<>(perfume, HttpStatus.OK);
+
+        } catch ( Exception e ) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Perfume> update(@PathVariable Long id, @RequestBody Perfume perfume) {
+        try{
+            Perfume per = perfumeService.findById(id);
+            per.setIdPerfume(id);
+            per.setNombrePerfume(perfume.getNombrePerfume());
+            per.setMarcaPerfume(perfume.getMarcaPerfume());
+            per.setTipoPerfume(perfume.getTipoPerfume());
+            per.setGeneroPerfume(perfume.getGeneroPerfume());
+            per.setStockPerfume(perfume.getStockPerfume());
+
+            perfumeService.save(per);
+            return new ResponseEntity<>(per, HttpStatus.OK);
+
+        } catch ( Exception e ) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Perfume> delete(@PathVariable Long id) {
+        try {
+            perfumeService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        } catch ( Exception e ) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

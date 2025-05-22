@@ -25,7 +25,7 @@ public class Perfume {
     @Column(nullable = false)
     private String tipoPerfume;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String generoPerfume;
 
     @Column(nullable = false)
