@@ -14,7 +14,7 @@ public class Perfume {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idPerfume;
+    private Long idPerfume;
 
     @Column(unique = true, nullable = false)
     private String nombrePerfume;
@@ -27,5 +27,8 @@ public class Perfume {
 
     @Column(nullable = false)
     private String generoPerfume;
+
+    @Column(nullable = false)
+    private int stockPerfume;
 
 }
