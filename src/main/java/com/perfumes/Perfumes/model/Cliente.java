@@ -1,8 +1,7 @@
 package com.perfumes.Perfumes.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,11 @@ import lombok.NoArgsConstructor;
 @Table(name = "clientes")
 public class Cliente {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int run;
+
+
     private String nombre;
     private String apellido;
     private String direccion;
