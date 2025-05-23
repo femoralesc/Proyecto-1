@@ -17,27 +17,44 @@ public class ProveedorController {
     private ProveedorService proveedorService;
 
     @GetMapping
-    public ResponseEntity<List<Proveedor>> listar() {
+    public ResponseEntity<List<Proveedor>> list() {
         List<Proveedor> proveedores = proveedorService.findAll();
         if (proveedores.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(proveedores);
+        return new ResponseEntity<>(proveedores, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Proveedor> guardar(@RequestBody Proveedor proveedor) {
-        Proveedor proveedorCreado = proveedorService.save(proveedor);
-        return ResponseEntity.status(HttpStatus.CREATED).body(proveedorCreado);
+    public ResponseEntity<Proveedor> create(@RequestBody Proveedor proveedor) {
+        Proveedor proveedorCreated = proveedorService.save(proveedor);
+        return new ResponseEntity<>(proveedorCreated, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Proveedor> buscar(@PathVariable Long id) {
-        try {
-            Proveedor proveedor = proveedorService.findById(id);
-            return ResponseEntity.ok(proveedor);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Proveedor> update(@PathVariable Long id, @RequestBody Proveedor proveedor) {
+        try{
+            Proveedor pro = proveedorService.findById(id);
+            pro.setIdProveedor(id);
+            pro.setNombreProveedor(proveedor.getNombreProveedor());
+            pro.setMarcaProveedor(proveedor.getMarcaProveedor());
+            pro.setContactoProveedor(proveedor.getContactoProveedor());
+
+            proveedorService.save(pro);
+            return new ResponseEntity<>(pro, HttpStatus.OK);
+
+        } catch (Exception e){
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Proveedor> delete(@PathVariable Long id) {
+        try{
+            proveedorService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
     }
 }

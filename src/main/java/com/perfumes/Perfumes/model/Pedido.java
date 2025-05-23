@@ -17,8 +17,16 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPedido;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String rutPedido;
+
+    @Column(nullable = false)
+    private String nombrePedido;
+
+    @Column(nullable = false)
+    private String descripcionPedido;
+
+
 
 
 }

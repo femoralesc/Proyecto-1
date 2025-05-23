@@ -15,10 +15,11 @@ public class Resena {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idResena;
 
     @Column(nullable = false)
-    private String comentario;
+    private String postResena;
+
     @Column(nullable = false)
-    private int calificacion;
+    private int notaResena;
 }

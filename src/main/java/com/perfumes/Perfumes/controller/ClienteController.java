@@ -13,60 +13,66 @@ import java.util.List;
 @RequestMapping("/api/v1/clientes")
 public class ClienteController {
 
-    private final ClienteService clienteService;
 
     @Autowired
-    public ClienteController(ClienteService clienteService) {
-        this.clienteService = clienteService;
-    }
+    public ClienteService clienteService;
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> listar() {
-        List<Cliente> clientes = (List<Cliente>) clienteService.findAll();
+    public ResponseEntity<List<Cliente>> list() {
+        List<Cliente> clientes = clienteService.findAll();
         if (clientes.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(clientes);
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> guardar(@RequestBody Cliente cliente) {
-        Cliente clienteCreado = clienteService.save(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteCreado);
+    public ResponseEntity<Cliente> create(@RequestBody Cliente cliente) {
+    Cliente clienteCreated = clienteService.save(cliente);
+    return new ResponseEntity<>(clienteCreated, HttpStatus.CREATED);
+
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscar(@PathVariable Long id) {
+    public ResponseEntity<Cliente> findById(@PathVariable Long id) {
         try {
             Cliente cliente = clienteService.findById(id);
-            return ResponseEntity.ok(cliente);
+            return new ResponseEntity<>(cliente, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> actualizar(@PathVariable Long id, @RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> update(@PathVariable Long id, @RequestBody Cliente cliente) {
         try {
             Cliente cli = clienteService.findById(id);
-            cli.setRun(cliente.getRun());
-            cli.setNombre(cliente.getNombre());
-            cli.setEmail(cliente.getEmail());
-            cli.setDireccion(cliente.getDireccion());
+            cli.setIdCliente(id);
+            cli.setRutCliente(cliente.getRutCliente());
+            cli.setNombreCliente(cliente.getNombreCliente());
+            cli.setApellidoCliente(cliente.getApellidoCliente());
+            cli.setDireccionCliente(cliente.getDireccionCliente());
+            cli.setTelefonoCliente(cliente.getTelefonoCliente());
+            cli.setDireccionCliente(cliente.getDireccionCliente());
             clienteService.save(cli);
-            return ResponseEntity.ok(cli);
+            return new ResponseEntity<>(cli, HttpStatus.OK);
+
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        try {
+    public ResponseEntity<Cliente> delete(@PathVariable Long id) {
+        try{
             clienteService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 }
+
+

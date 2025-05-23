@@ -15,19 +15,24 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long idCliente;
 
     @Column(length = 10, unique = true, nullable = false)
     private String rutCliente;
+
     @Column(unique = true, nullable = false)
-    private String nombre;
+    private String nombreCliente;
+
     @Column(nullable = false)
-    private String apellido;
+    private String apellidoCliente;
+
     @Column(nullable = false)
-    private String direccion;
+    private String direccionCliente;
+
     @Column(nullable = false)
-    private String telefono;
+    private String telefonoCliente;
+
     @Column(nullable = false)
-    private String email;
+    private String emailCliente;
 
 }

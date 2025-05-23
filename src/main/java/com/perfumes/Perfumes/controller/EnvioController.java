@@ -17,39 +17,54 @@ public class EnvioController {
     private EnvioService envioService;
 
     @GetMapping
-    public ResponseEntity<List<Envio>> listar() {
+    public ResponseEntity<List<Envio>> list() {
         List<Envio> envios = envioService.findAll();
         if (envios.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(envios);
+        return new ResponseEntity<>(envios, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Envio> guardar(@RequestBody Envio envio) {
-        Envio envioCreado = envioService.save(envio);
-        return ResponseEntity.status(HttpStatus.CREATED).body(envioCreado);
+    public ResponseEntity<Envio> create(@RequestBody Envio envio) {
+        Envio envioCreated = envioService.save(envio);
+        return new ResponseEntity<>(envioCreated, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Envio> buscar(@PathVariable Long id) {
+    public ResponseEntity<Envio> findById(@PathVariable Long id) {
         try {
             Envio envio = envioService.findById(id);
-            return ResponseEntity.ok(envio);
+            return new ResponseEntity<>(envio, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Envio> actualizarEstado(@PathVariable Long id, @RequestBody String nuevoEstado) {
+    public ResponseEntity<Envio> update(@PathVariable Long id, @RequestBody Envio envio) {
         try {
-            Envio envio = envioService.findById(id);
-            envio.setEstado(nuevoEstado);
+            Envio env = envioService.findById(id);
+            env.setIdEnvio(envio.getIdEnvio());
+            env.setEstadoEnvio(envio.getEstadoEnvio());
+            env.setDireccionEnvio(envio.getDireccionEnvio());
+            env.setFechaEnvio(envio.getFechaEnvio());
+
             envioService.save(envio);
-            return ResponseEntity.ok(envio);
+            return new ResponseEntity<>(envio, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Envio> delete(@PathVariable Long id) {
+        try{
+            envioService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

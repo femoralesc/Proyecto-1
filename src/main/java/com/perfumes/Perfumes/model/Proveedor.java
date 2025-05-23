@@ -15,10 +15,17 @@ public class Proveedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idProveedor;
 
     @Column(unique = true, nullable = false)
-    private String nombre;
+    private String nombreProveedor;
+
     @Column(nullable = false)
-    private String contacto;
+    private String marcaProveedor;
+
+    @Column(nullable = false)
+    private String contactoProveedor;
+
+
+
 }

@@ -20,34 +20,49 @@ public class ResenaController {
     public ResponseEntity<List<Resena>> listar() {
         List<Resena> resenas = resenaService.findAll();
         if (resenas.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(resenas);
+        return new ResponseEntity<>(resenas, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Resena> guardar(@RequestBody Resena resena) {
-        Resena resenaCreada = resenaService.save(resena);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resenaCreada);
+    public ResponseEntity<Resena> create(@RequestBody Resena resena) {
+        Resena resenaCreated = resenaService.save(resena);
+        return new ResponseEntity<>(resenaCreated, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Resena> buscar(@PathVariable Long id) {
+    public ResponseEntity<Resena> findById(@PathVariable Long id) {
         try {
             Resena resena = resenaService.findById(id);
-            return ResponseEntity.ok(resena);
+            return new ResponseEntity<>(resena, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Resena> update(@PathVariable Long id, @RequestBody Resena resena) {
+        try{
+            Resena res = resenaService.findById(id);
+            res.setIdResena(id);
+            res.setPostResena(resena.getPostResena());
+            res.setNotaResena(resena.getNotaResena());
+
+            resenaService.save(res);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             resenaService.delete(id);
-            return ResponseEntity.noContent().build();
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

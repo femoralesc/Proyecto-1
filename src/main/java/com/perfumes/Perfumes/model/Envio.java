@@ -17,11 +17,15 @@ public class Envio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idEnvio;
 
     @Column(nullable = false)
-    private String estado;
+    private String estadoEnvio;
+
     @Column(nullable = false)
-    private String direccionEntrega;
+    private String direccionEnvio;
+
+    @Column(nullable = false)
+    private String fechaEnvio;
 
 }

@@ -18,11 +18,11 @@ public class Backup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idBackup;
 
     @Column(nullable = false)
-    private String fecha;
+    private String fechaBackup;
 
     @Column(nullable = false)
-    private String archivo;
+    private String archivoBackup;
 }
