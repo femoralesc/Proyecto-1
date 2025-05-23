@@ -14,8 +14,10 @@ public class Permiso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
+    @Column(unique = true, nullable = false)
     private String nombre;
+    @Column(nullable = false)
     private String descripcion;
 }
