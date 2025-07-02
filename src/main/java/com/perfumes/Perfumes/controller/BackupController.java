@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-//push q me pidio el alfonso
 @RestController
 @RequestMapping("/api/v1/backups")
 public class BackupController {
@@ -33,29 +31,25 @@ public class BackupController {
         return new ResponseEntity<>(backupCreated, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Backup> update(@PathVariable Long id, @RequestBody Backup backup) {
-        try{
-            Backup bac = backupService.findById(id);
-            bac.setIdBackup(id);
-            bac.setFechaBackup(backup.getFechaBackup());
-            bac.setArchivoBackup(backup.getArchivoBackup());
-            backupService.save(bac);
-            return new ResponseEntity<>(bac, HttpStatus.OK);
-
-        } catch (Exception e){
+        try {
+            Backup existing = backupService.findById(id);
+            existing.setFechaBackup(backup.getFechaBackup());
+            existing.setArchivoBackup(backup.getArchivoBackup());
+            Backup updated = backupService.save(existing);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
-    @DeleteMapping
-    public ResponseEntity<Backup> delete(@PathVariable Long id) {
-        try{
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        try {
             backupService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-        } catch (Exception e ) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
