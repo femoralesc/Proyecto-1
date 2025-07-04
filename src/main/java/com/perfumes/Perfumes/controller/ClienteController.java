@@ -1,18 +1,30 @@
 package com.perfumes.Perfumes.controller;
 
+import com.perfumes.Perfumes.assemblers.ClienteModelAssembler;
 import com.perfumes.Perfumes.model.Cliente;
 import com.perfumes.Perfumes.service.ClienteService;
+import com.perfumes.Perfumes.service.PerfumeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
+import java.util.stream.Collectors;
+
+
 
 @RestController
 @RequestMapping("/api/v1/clientes")
@@ -21,6 +33,9 @@ public class ClienteController {
 
     @Autowired
     public ClienteService clienteService;
+
+    @Autowired
+    ClienteModelAssembler clienteModelAssembler;
 
     @GetMapping
     @Operation(summary = "Obtener todos los clientes", description = "Obtiene una lista de todos los clientes")

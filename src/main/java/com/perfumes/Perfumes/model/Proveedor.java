@@ -15,6 +15,7 @@ public class Proveedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
     private Long idProveedor;
 
     @Column(unique = true, nullable = false)

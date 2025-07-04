@@ -1,5 +1,7 @@
 package com.perfumes.Perfumes.controller;
 
+import com.perfumes.Perfumes.assemblers.ProveedorModelAssembler;
+import com.perfumes.Perfumes.model.Perfume;
 import com.perfumes.Perfumes.model.Proveedor;
 import com.perfumes.Perfumes.service.ProveedorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,11 +10,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/proveedores")
@@ -22,14 +32,19 @@ public class ProveedorController {
     @Autowired
     private ProveedorService proveedorService;
 
+    @Autowired
+    ProveedorModelAssembler assembler;
+
     @GetMapping
     @Operation(summary = "Obtener todos los proveedores", description = "Obtiene una lista de todos los proveedores registrados")
-    public ResponseEntity<List<Proveedor>> list() {
+    public ResponseEntity<CollectionModel<EntityModel<Proveedor>>> list() {
         List<Proveedor> proveedores = proveedorService.findAll();
         if (proveedores.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(assembler.toCollectionModel(proveedores), HttpStatus.OK);
+
         }
-        return new ResponseEntity<>(proveedores, HttpStatus.OK);
     }
 
     @PostMapping
@@ -49,11 +64,11 @@ public class ProveedorController {
             @ApiResponse(responseCode = "200", description = "Proveedor encontrado"),
             @ApiResponse(responseCode = "404", description = "Proveedor no encontrado")
     })
-    public ResponseEntity<Proveedor> findById(
+    public ResponseEntity<EntityModel<Proveedor>> findById(
             @Parameter(description = "ID del proveedor a buscar") @PathVariable Long id) {
         try {
             Proveedor pro = proveedorService.findById(id);
-            return new ResponseEntity<>(pro, HttpStatus.OK);
+            return new ResponseEntity<>(assembler.toModel(pro), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
